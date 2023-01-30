@@ -1,44 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:picscope/shared/basic.dart';
 
 Styles styles = Styles();
 
 class Styles {
-  //Horizontal spacing
-  Widget hSpaceTiny = const SizedBox(width: 5);
-  Widget hSpaceSmall = const SizedBox(width: 10);
-  Widget hSpaceMedium = const SizedBox(width: 20);
-  Widget hSpaceLarge = const SizedBox(width: 40);
-  Widget hSpaceMassive = const SizedBox(width: 80);
-  Widget hSpaceHuge = const SizedBox(width: 120);
-  Widget hSpaceGiant = const SizedBox(width: 200);
-
-  //Vertical spacing
-  Widget vSpaceTiny = const SizedBox(height: 5);
-  Widget vSpaceSmall = const SizedBox(height: 10);
-  Widget vSpaceMedium = const SizedBox(height: 20);
-  Widget vSpaceLarge = const SizedBox(height: 40);
-  Widget vSpaceMassive = const SizedBox(height: 80);
-  Widget vSpaceHuge = const SizedBox(height: 120);
-  Widget vSpaceGiant = const SizedBox(height: 200);
-
-  //Border Radius Styles
-  Radius borderRadiusTiny = const Radius.circular(5);
-  Radius borderRadiusSmall = const Radius.circular(10);
-  Radius borderRadiusMedium = const Radius.circular(20);
-  Radius borderRadiusLarge = const Radius.circular(40);
-  Radius borderRadiusMassive = const Radius.circular(80);
-
   //Text Buttons Styles
-  ButtonStyle textButtonStyle = ButtonStyle(
+  ButtonStyle textButtonStyle(BuildContext context) => ButtonStyle(
       foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-      textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
-          fontSize: 16, fontWeight: FontWeight.w300, fontFamily: 'Popins')));
+      textStyle: MaterialStateProperty.all<TextStyle>(textButton(context)));
 
   // Outlined Input Border Styles
   OutlineInputBorder inputBorderStyle(BuildContext context,
           {bool isFocused = false}) =>
       OutlineInputBorder(
-        borderRadius: BorderRadius.all(borderRadiusMedium),
+        borderRadius: BorderRadius.all(basics.borderRadiusLarge),
         borderSide: BorderSide(
           color: isFocused
               ? Theme.of(context).primaryColor
@@ -46,6 +21,24 @@ class Styles {
           width: 2,
         ),
       );
+
+  // Text Field Decoration
+  InputDecoration textFieldDecoraction(BuildContext context,
+      {String hintText = "Rechercher"}) {
+    ThemeData theme = Theme.of(context);
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: styles.textBody(context),
+      prefixIcon: Icon(
+        Icons.search,
+        color: theme.primaryColor,
+      ),
+      filled: true,
+      fillColor: theme.canvasColor,
+      enabledBorder: inputBorderStyle(context),
+      focusedBorder: inputBorderStyle(context, isFocused: true),
+    );
+  }
 
   // Method to get the generic text style
   TextStyle _getTextStyle(BuildContext context,

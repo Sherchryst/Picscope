@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:picscope/shared/theme.dart';
+import 'package:picscope/view/home/home.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,8 +18,10 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeNotifier>(
         builder: (context, theme, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Picscope',
             theme: theme.getTheme(),
+            home: const HomeView(),
           );
         },
       ),
