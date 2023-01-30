@@ -21,16 +21,12 @@ class Styles {
   Widget vSpaceHuge = const SizedBox(height: 120);
   Widget vSpaceGiant = const SizedBox(height: 200);
 
-  //Screen size and Screen size percentage
-  double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
-  double screenHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height;
-  double screenWidthPercentage(BuildContext context,
-          {required double percentage}) =>
-      screenWidth(context) * percentage;
-  double screenHeightPercentage(BuildContext context,
-          {required double percentage}) =>
-      screenHeight(context) * percentage;
+  //Border Radius Styles
+  Radius borderRadiusTiny = const Radius.circular(5);
+  Radius borderRadiusSmall = const Radius.circular(10);
+  Radius borderRadiusMedium = const Radius.circular(20);
+  Radius borderRadiusLarge = const Radius.circular(40);
+  Radius borderRadiusMassive = const Radius.circular(80);
 
   //Text Buttons Styles
   ButtonStyle textButtonStyle = ButtonStyle(
@@ -38,15 +34,44 @@ class Styles {
       textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
           fontSize: 16, fontWeight: FontWeight.w300, fontFamily: 'Popins')));
 
-  //Text styles
-  TextStyle textTitle = const TextStyle(
-      fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Popins');
-  TextStyle textThin = const TextStyle(
-      fontSize: 16, fontWeight: FontWeight.w300, fontFamily: 'Popins');
-  TextStyle textHead1 = const TextStyle(
-      fontSize: 50, fontWeight: FontWeight.bold, fontFamily: 'Popins');
-  TextStyle textSubtitle = const TextStyle(
-      fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Popins');
-  TextStyle textBody = const TextStyle(
-      fontSize: 14, fontWeight: FontWeight.w300, fontFamily: 'Popins');
+  // Outlined Input Border Styles
+  OutlineInputBorder inputBorderStyle(BuildContext context,
+          {bool isFocused = false}) =>
+      OutlineInputBorder(
+        borderRadius: BorderRadius.all(borderRadiusMedium),
+        borderSide: BorderSide(
+          color: isFocused
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).disabledColor,
+          width: 2,
+        ),
+      );
+
+  // Method to get the generic text style
+  TextStyle _getTextStyle(BuildContext context,
+      {double fontSize = 14,
+      FontWeight fontWeight = FontWeight.w300,
+      String fontFamily = 'Popins'}) {
+    final theme = Theme.of(context);
+    return theme.brightness == Brightness.light
+        ? TextStyle(
+            fontSize: fontSize, fontWeight: fontWeight, fontFamily: fontFamily)
+        : TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            fontFamily: fontFamily,
+            color: Colors.white);
+  }
+
+  // Method to get the specific text style
+  TextStyle textTitle(BuildContext context) =>
+      _getTextStyle(context, fontSize: 24, fontWeight: FontWeight.bold);
+  TextStyle textSubtitle(BuildContext context) =>
+      _getTextStyle(context, fontSize: 18, fontWeight: FontWeight.w600);
+  TextStyle textBody(BuildContext context) =>
+      _getTextStyle(context, fontSize: 14, fontWeight: FontWeight.w500);
+  TextStyle textCaption(BuildContext context) =>
+      _getTextStyle(context, fontSize: 12, fontWeight: FontWeight.w500);
+  TextStyle textButton(BuildContext context) =>
+      _getTextStyle(context, fontSize: 16, fontWeight: FontWeight.w500);
 }
