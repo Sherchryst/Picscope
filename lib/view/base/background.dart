@@ -14,12 +14,7 @@ class BackGround extends StatelessWidget {
       appBar: appBar(themeNotifier, context),
       body: SizedBox(
         width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(child: SingleChildScrollView(child: child)),
-          ],
-        ),
+        child: child,
       ),
     );
   }

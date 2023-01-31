@@ -17,7 +17,7 @@ class Photo {
       id: json["id"],
       description: json["description"] ?? "",
       url: json["urls"]["full"],
-      thumbnailUrl: json["urls"]["thumb"],
+      thumbnailUrl: json["urls"]["regular"],
       userName: json["user"]["name"],
     );
   }
