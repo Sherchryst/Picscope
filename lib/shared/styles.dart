@@ -6,7 +6,8 @@ Styles styles = Styles();
 class Styles {
   //Text Buttons Styles
   ButtonStyle textButtonStyle(BuildContext context) => ButtonStyle(
-      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      foregroundColor:
+          MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
       textStyle: MaterialStateProperty.all<TextStyle>(textButton(context)));
 
   // Outlined Input Border Styles
@@ -24,14 +25,16 @@ class Styles {
 
   // Text Field Decoration
   InputDecoration textFieldDecoraction(BuildContext context,
-      {String hintText = "Rechercher"}) {
+      {String hintText = "Rechercher", void Function()? onPressed}) {
     ThemeData theme = Theme.of(context);
     return InputDecoration(
       hintText: hintText,
       hintStyle: styles.textBody(context),
-      prefixIcon: Icon(
-        Icons.search,
-        color: theme.primaryColor,
+      suffixIcon: IconButton(
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        icon: const Icon(Icons.arrow_forward),
+        onPressed: onPressed,
       ),
       filled: true,
       fillColor: theme.canvasColor,
