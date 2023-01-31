@@ -12,8 +12,8 @@ SizedBox searchBar(BuildContext context, TextEditingController searchController,
       controller: searchController,
       style: styles.textBody(context),
       decoration: styles.textFieldDecoraction(context,
-          onPressed: () => searchPhotos(context)),
-      onSubmitted: (value) => searchPhotos(context),
+          onPressed: () => searchPhotos(context, false)),
+      onSubmitted: (value) => searchPhotos(context, false),
     ),
   );
 }

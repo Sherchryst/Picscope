@@ -11,10 +11,15 @@ class BackGround extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
-      appBar: appBar(themeNotifier, context),
-      body: SizedBox(
-        width: double.infinity,
-        child: child,
+      body: CustomScrollView(
+        slivers: [
+          appBar(themeNotifier, context),
+          SliverFillRemaining(
+            child: Container(
+              child: child,
+            ),
+          ),
+        ],
       ),
     );
   }
