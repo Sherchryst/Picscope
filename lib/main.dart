@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:picscope/shared/theme.dart';
+import 'package:picscope/theme_notifier.dart';
 import 'package:picscope/view/home/home.dart';
 import 'package:provider/provider.dart';
 

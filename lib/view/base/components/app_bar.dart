@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:picscope/shared/styles.dart';
-import 'package:picscope/shared/theme.dart';
+import 'package:picscope/theme_notifier.dart';
 
 SliverAppBar appBar(ThemeNotifier themeNotifier, BuildContext context) {
   return SliverAppBar(
