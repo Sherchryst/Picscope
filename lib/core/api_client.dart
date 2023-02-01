@@ -24,16 +24,11 @@ class ApiClient {
   void _logAndAddAccessKey(
       RequestOptions options, RequestInterceptorHandler handler) {
     options.queryParameters["client_id"] = _accessKey;
-    print("Request: ${options.method} ${options.path}");
-    print("Headers: ${options.headers}");
-    print("Params: ${options.queryParameters}");
     handler.next(options);
   }
 
   // Logs the response status and data
   void _logResponse(Response response, ResponseInterceptorHandler handler) {
-    print("Response: ${response.statusCode}");
-    print("Data: ${response.data}");
     handler.next(response);
   }
 
@@ -54,8 +49,9 @@ class ApiClient {
   }
 
   // Download a photo
-  Future<Response> downloadPhoto({required String url}) async {
-    return await _makeRequest(url, queryParameters: {});
+  Future<Response> downloadPhoto({required String id}) async {
+    return await _makeRequest("${_baseUrl}photos/$id/download",
+        queryParameters: {});
   }
 
   // Makes a request using Dio
