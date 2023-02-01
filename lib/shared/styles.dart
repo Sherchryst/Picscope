@@ -63,7 +63,7 @@ class Styles {
   TextStyle textTitle(BuildContext context) =>
       _getTextStyle(context, fontSize: 24, fontWeight: FontWeight.bold);
   TextStyle textSubtitle(BuildContext context) =>
-      _getTextStyle(context, fontSize: 18, fontWeight: FontWeight.w600);
+      _getTextStyle(context, fontSize: 16, fontWeight: FontWeight.w600);
   TextStyle textBody(BuildContext context) =>
       _getTextStyle(context, fontSize: 14, fontWeight: FontWeight.w500);
   TextStyle textCaption(BuildContext context) =>
