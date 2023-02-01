@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_downloader/image_downloader.dart';
+import 'package:image_downloader_web/image_downloader_web.dart';
+import 'package:picscope/core/api_client.dart';
 import 'package:picscope/model/photo.dart';
 import 'package:picscope/responsive.dart';
 import 'package:picscope/shared/basic.dart';
@@ -6,28 +9,65 @@ import 'package:picscope/shared/styles.dart';
 import 'package:picscope/theme_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
-class ImageList extends StatelessWidget {
+class ImageList extends StatefulWidget {
   final List<Photo>? photos;
   final void Function(BuildContext, bool) loadNextPage;
   final bool isThereMorePages;
-  ImageList({
+  const ImageList({
     super.key,
     required this.photos,
     required this.loadNextPage,
     required this.isThereMorePages,
   });
+  @override
+  State<ImageList> createState() => _ImageListState();
+}
 
+class _ImageListState extends State<ImageList> {
   final PageController _pageController = PageController();
+  String file = '';
+  bool dataIsLoading = false;
+
+  void downloadImage(String imageUrl, String imageId) async {
+    await apiClient.downloadPhoto(id: imageId);
+    // Check if the code is running on mobile or web
+    try {
+      if (!kIsWeb) {
+        // Running on mobile, use image_downloader
+        await ImageDownloader.downloadImage(imageUrl);
+        setState(() {
+          dataIsLoading = false;
+        });
+      } else {
+        // Running on web, use image_downloader_web
+        await WebImageDownloader.downloadImageFromWeb(imageUrl, name: imageId);
+        setState(() {
+          dataIsLoading = false;
+        });
+      }
+      if (mounted) {
+        apiClient.displayMessage(context, "Image downloaded", false);
+      }
+    } catch (e) {
+      if (mounted) {
+        apiClient.displayMessage(context, "Error downloading image $e", true);
+      }
+      setState(() {
+        dataIsLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final int itemsCount = photos?.length ?? 0;
+    final int itemsCount = widget.photos?.length ?? 0;
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Expanded(
         child: ListView.builder(
       controller: _pageController,
-      itemCount: itemsCount + (isThereMorePages ? 1 : 0),
+      itemCount: itemsCount + (widget.isThereMorePages ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == itemsCount) {
           return addElements(context, themeNotifier);
@@ -60,9 +100,22 @@ class ImageList extends StatelessWidget {
           icon: const Icon(Icons.share),
           onPressed: () {
             Share.share(
-                "Take a look at this beautiful photo on Picscope! Come and explore the amazing world of photography with us. Follow this link to see the photo: ${photos![index].url} #Picscope #Photography #Discover");
+                "Take a look at this beautiful photo on Picscope! Come and explore the amazing world of photography with us. Follow this link to see the photo: ${widget.photos![index].url} #Picscope #Photography #Discover");
           },
         ),
+        dataIsLoading && file == widget.photos![index].id
+            ? CircularProgressIndicator(color: Theme.of(context).primaryColor)
+            : IconButton(
+                icon: const Icon(Icons.download),
+                onPressed: () {
+                  setState(() {
+                    file = widget.photos![index].id;
+                    dataIsLoading = true;
+                  });
+                  downloadImage(
+                      widget.photos![index].url, widget.photos![index].id);
+                },
+              ),
       ],
     );
   }
@@ -71,13 +124,13 @@ class ImageList extends StatelessWidget {
       BuildContext context, ThemeNotifier themeNotifier, int index) {
     return Container(
       constraints: BoxConstraints(
-        minHeight: responsive.screenHeightPercentage(context, percentage: 0.6),
+        minHeight: responsive.screenHeightPercentage(context, percentage: 0.3),
         maxHeight: responsive.screenHeightPercentage(context, percentage: 0.6),
       ),
       decoration: BoxDecoration(
         color: themeNotifier.isDarkTheme ? Colors.black : Colors.white,
       ),
-      child: Image.network(photos![index].url),
+      child: Image.network(widget.photos![index].url),
     );
   }
 
@@ -92,10 +145,10 @@ class ImageList extends StatelessWidget {
 
   ListTile headerPost(BuildContext context, int index) {
     return ListTile(
-        title:
-            Text(photos![index].userName, style: styles.textSubtitle(context)),
+        title: Text(widget.photos![index].userName,
+            style: styles.textSubtitle(context)),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(photos![index].userAvatar ?? ''),
+          backgroundImage: NetworkImage(widget.photos![index].userAvatar ?? ''),
           backgroundColor: Colors.grey,
         ));
   }
@@ -110,18 +163,18 @@ class ImageList extends StatelessWidget {
         child: Center(
           child: IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => loadNextPage(context, true),
+            onPressed: () => widget.loadNextPage(context, true),
           ),
         ));
   }
 
   Widget descriptionPost(BuildContext context, int index) {
-    if (photos![index].description == null) {
+    if (widget.photos![index].description == null) {
       return const SizedBox();
     } else {
       return ListTile(
         title: Text(
-          photos![index].description!,
+          widget.photos![index].description!,
           style: styles.textBody(context),
         ),
       );
@@ -133,7 +186,7 @@ class ImageList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(
-          '${photos![index].likes ?? '0'} likes',
+          '${widget.photos![index].likes ?? '0'} likes',
           style: styles.textBody(context),
         ),
         basics.hSpaceSmall
