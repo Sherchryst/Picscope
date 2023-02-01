@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:picscope/core/api_client.dart';
 import 'package:picscope/model/photo.dart';
 import 'package:picscope/shared/basic.dart';
+import 'package:picscope/theme_notifier.dart';
 import 'package:picscope/view/base/background.dart';
-import 'package:picscope/view/home/components/results_list.dart';
 import 'package:picscope/view/home/components/search_bar.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -62,14 +63,17 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return BackGround(
       child: Column(
         children: [
           basics.vSpaceMedium,
           searchBar(context, _searchController, _searchPhotos),
           basics.vSpaceMedium,
-          resultsPhoto(
-              context, _photos, _searchPhotos, currentPage < totalPages),
+          themeNotifier.getDisplayMode(
+              photos: _photos,
+              loadNextPage: _searchPhotos,
+              isThereMorePages: currentPage < totalPages),
         ],
       ),
     );
