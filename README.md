@@ -7,6 +7,7 @@ This application is a technical test to develop an image search application usin
 - Displaying images in a Listview with details (image, author, description and likes)
 - Displaying images in a Gridview with no details
 - Displaying images in full screen
+- Downloading images
 - Sharing an image (via email, SMS, etc.) (optional)
 
 ## Coding Conventions
