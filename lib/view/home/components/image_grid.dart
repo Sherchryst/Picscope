@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picscope/model/photo.dart';
 import 'package:picscope/responsive.dart';
+import 'package:picscope/view/screen/full_screen.dart';
 
 class ImageGrid extends StatelessWidget {
   final List<Photo>? photos;
@@ -50,31 +51,10 @@ class ImageGrid extends StatelessWidget {
 
   Future<dynamic> interactiveDisplay(
       BuildContext context, List<Photo> photos, int index) {
-    return showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        child: SizedBox(
-          width: responsive.screenWidthPercentage(context, percentage: 0.9),
-          height: responsive.screenHeightPercentage(context, percentage: 0.7),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              const Center(child: CircularProgressIndicator()),
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                width:
-                    responsive.screenWidthPercentage(context, percentage: 0.9),
-                height:
-                    responsive.screenHeightPercentage(context, percentage: 0.7),
-                child: InteractiveViewer(
-                    maxScale: 12,
-                    child: Image.network(photos[index].fullHDUrl)),
-              ),
-            ],
-          ),
-        ),
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullScreenPage(imageUrl: photos[index].url),
       ),
     );
   }

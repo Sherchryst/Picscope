@@ -25,7 +25,7 @@ class Styles {
 
   // Text Field Decoration
   InputDecoration textFieldDecoraction(BuildContext context,
-      {String hintText = "Rechercher", void Function()? onPressed}) {
+      {String hintText = "Search", void Function()? onPressed}) {
     ThemeData theme = Theme.of(context);
     return InputDecoration(
       hintText: hintText,
